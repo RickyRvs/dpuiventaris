@@ -3,7 +3,7 @@ nixPkgs = ["php82", "php82Extensions.gd", "php82Extensions.pdo_mysql", "php82Ext
 
 [phases.install]
 cmds = [
-  "composer install --no-dev --optimize-autoloader --no-interaction",
+  "composer install --no-dev --optimize-autoloader --no-interaction --no-scripts",
   "npm ci"
 ]
 
@@ -15,4 +15,4 @@ cmds = [
 ]
 
 [start]
-cmd = "php artisan migrate --force && php artisan storage:link && php artisan optimize && php -S 0.0.0.0:$PORT -t public"
+cmd = "php artisan package:discover --ansi && php artisan migrate --force && php artisan storage:link && php artisan optimize && php -S 0.0.0.0:$PORT -t public"
