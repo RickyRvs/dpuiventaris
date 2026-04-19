@@ -1,5 +1,8 @@
 {
   "$schema": "https://railpack.io/schema/railpack.json",
+  "build": {
+    "secrets": []
+  },
   "phases": {
     "extensions": {
       "cmds": ["install-php-extensions gd zip pdo_mysql bcmath ctype curl dom fileinfo filter hash mbstring openssl pcre pdo session tokenizer xml"]
