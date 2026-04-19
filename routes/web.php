@@ -1,5 +1,13 @@
 <?php
-
+Route::get('/test-error', function() {
+    return response()->json([
+        'status' => 'ok',
+        'app_key' => substr(config('app.key'), 0, 10) . '...',
+        'db' => \DB::connection()->getDatabaseName(),
+        'session_driver' => config('session.driver'),
+        'view_exists' => view()->exists('auth.login'),
+    ]);
+});
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventarisController;
 
