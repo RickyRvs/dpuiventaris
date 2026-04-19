@@ -1,1 +1,8 @@
-{"$schema":"https://railpack.io/schema/railpack.json","php":{"extensions":["gd","pdo_mysql","mbstring","xml","curl","zip","bcmath"]}}
+{
+  "$schema": "https://railpack.io/schema/railpack.json",
+  "phases": {
+    "extensions": {
+      "cmds": ["install-php-extensions gd zip pdo_mysql bcmath ctype curl dom fileinfo filter hash mbstring openssl pcre pdo session tokenizer xml"]
+    }
+  }
+}
