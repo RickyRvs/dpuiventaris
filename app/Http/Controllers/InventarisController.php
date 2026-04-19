@@ -93,11 +93,10 @@ class InventarisController extends Controller
     // AUTH
     // ============================================================
 
-    public function loginForm()
-    {
-        if (Session::has('user_name')) return redirect()->route('dashboard');
-        return view('auth.login');
-    }
+   public function loginForm()
+{
+    return response('LOGIN PAGE OK - ' . app()->environment());
+}
 
     public function loginPost(Request $request)
     {
