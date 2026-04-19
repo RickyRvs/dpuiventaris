@@ -10,8 +10,5 @@
         "mkdir -p storage/framework/{sessions,views,cache,testing} storage/logs bootstrap/cache && chmod -R a+rw storage"
       ]
     }
-  },
-  "deploy": {
-    "startCmd": "php artisan route:clear && php artisan cache:clear && php artisan migrate --force && frankenphp run --config /etc/caddy/Caddyfile"
   }
 }
