@@ -65,13 +65,14 @@
             "dont-discover": []
         }
     },
-   "config": {
+"config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true,
     "platform-check": false,
     "platform": {
-        "ext-gd": "1.0"
+        "ext-gd": "1.0",
+        "ext-zip": "1.0"
     },
     "allow-plugins": {
         "pestphp/pest-plugin": true,
