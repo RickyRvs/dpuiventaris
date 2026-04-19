@@ -1,0 +1,13 @@
+[phases.setup]
+nixPkgs = ["php82", "php82Extensions.gd", "php82Extensions.pdo_mysql", "php82Extensions.mbstring", "php82Extensions.xml", "php82Extensions.curl", "php82Extensions.zip", "php82Extensions.bcmath", "nodejs_22", "nodePackages.npm"]
+
+[phases.build]
+cmds = [
+  "npm install",
+  "npm run build",
+  "mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache",
+  "chmod -R 777 storage bootstrap/cache"
+]
+
+[start]
+cmd = "php artisan migrate --force && php artisan storage:link && php artisan optimize && php -S 0.0.0.0:$PORT -t public"
