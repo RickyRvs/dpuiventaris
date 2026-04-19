@@ -1,0 +1,1 @@
+{"$schema":"https://railpack.io/schema/railpack.json","php":{"extensions":["gd","pdo_mysql","mbstring","xml","curl","zip","bcmath"]}}
