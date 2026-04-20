@@ -143,6 +143,27 @@ select.field { cursor: pointer; appearance: auto; }
   font-size: 11.5px; color: #166534; display: flex; align-items: center; gap: 7px;
 }
 
+/* ── Register strip ── */
+.register-strip {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: #f8f7f3; border: 1.5px dashed #e2e8f0; border-radius: 12px;
+  padding: 11px 14px; margin-top: 12px; text-decoration: none;
+  transition: all .18s; cursor: pointer;
+}
+.register-strip:hover {
+  border-color: #f97316; background: #fff7ed;
+}
+.register-strip:hover .reg-label { color: #ea580c; }
+.register-strip:hover .reg-icon  { background: linear-gradient(135deg,#f97316,#ea580c); }
+.register-strip:hover .reg-icon span { color: #fff !important; }
+.reg-icon {
+  width: 28px; height: 28px; border-radius: 8px; background: #f1f5f9;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: all .18s;
+}
+.reg-text { font-size: 11.5px; color: #94a3b8; font-weight: 500; }
+.reg-label { font-size: 12px; font-weight: 700; color: #64748b; transition: color .18s; }
+
 /* ── Step Indicator ── */
 .step-indicator {
   display: flex; align-items: center; gap: 0; margin-bottom: 20px;
@@ -202,9 +223,7 @@ select.field { cursor: pointer; appearance: auto; }
   display: flex; align-items: center; justify-content: center;
   transition: all .18s; flex-shrink: 0;
 }
-.kantor-card.selected .kantor-radio {
-  border-color: #3b82f6; background: #3b82f6;
-}
+.kantor-card.selected .kantor-radio { border-color: #3b82f6; background: #3b82f6; }
 .kantor-radio-dot {
   width: 7px; height: 7px; border-radius: 50%; background: #fff;
   opacity: 0; transition: opacity .15s;
@@ -394,6 +413,18 @@ select.field { cursor: pointer; appearance: auto; }
             Masuk ke Sistem
           </button>
         </form>
+
+        <!-- ── Register link (Admin) ── -->
+        <a href="{{ route('register') }}" class="register-strip">
+          <div class="reg-icon">
+            <span class="material-symbols-outlined fill-icon" style="color:#94a3b8;font-size:15px;">how_to_reg</span>
+          </div>
+          <div>
+            <div class="reg-label">Belum punya akun?</div>
+            <div class="reg-text">Ajukan registrasi — disetujui Admin</div>
+          </div>
+          <span class="material-symbols-outlined" style="color:#cbd5e1;font-size:16px;margin-left:auto;">chevron_right</span>
+        </a>
       </div>
 
       <!-- ══ FORM OPERATOR ══ -->
@@ -412,19 +443,16 @@ select.field { cursor: pointer; appearance: auto; }
 
         <!-- ── Step Indicator ── -->
         <div class="step-indicator" id="step-indicator">
-          <!-- Step 1 -->
           <div class="step-item">
             <div class="step-circle active" id="sc-1">1</div>
             <div class="step-label active" id="sl-1">Identitas</div>
           </div>
           <div class="step-line idle" id="line-1" style="margin-bottom:18px;"></div>
-          <!-- Step 2 -->
           <div class="step-item">
             <div class="step-circle idle" id="sc-2">2</div>
             <div class="step-label idle" id="sl-2">Kantor</div>
           </div>
           <div class="step-line idle" id="line-2" style="margin-bottom:18px;"></div>
-          <!-- Step 3 -->
           <div class="step-item">
             <div class="step-circle idle" id="sc-3">3</div>
             <div class="step-label idle" id="sl-3">Masuk</div>
@@ -467,12 +495,22 @@ select.field { cursor: pointer; appearance: auto; }
             <span class="material-symbols-outlined fill-icon" style="font-size:18px;">arrow_forward</span>
             Lanjutkan
           </button>
+
+          <!-- ── Register link (Operator) ── -->
+          <a href="{{ route('register') }}" class="register-strip">
+            <div class="reg-icon">
+              <span class="material-symbols-outlined fill-icon" style="color:#94a3b8;font-size:15px;">how_to_reg</span>
+            </div>
+            <div>
+              <div class="reg-label">Belum punya akun?</div>
+              <div class="reg-text">Ajukan registrasi — disetujui Admin</div>
+            </div>
+            <span class="material-symbols-outlined" style="color:#cbd5e1;font-size:16px;margin-left:auto;">chevron_right</span>
+          </a>
         </div>
 
         <!-- ══ STEP 2: Pilih Kantor ══ -->
         <div id="op-step2" class="panel-anim" style="display:none;">
-
-          <!-- Verify strip -->
           <div class="verify-strip">
             <span class="material-symbols-outlined fill-icon" style="font-size:17px;color:#2563eb;flex-shrink:0;">verified_user</span>
             <div>
@@ -480,19 +518,11 @@ select.field { cursor: pointer; appearance: auto; }
               <div id="op-greeting" style="font-size:11px;color:#3b82f6;margin-top:1px;"></div>
             </div>
           </div>
-
-          <!-- Pilih kantor label -->
           <div style="margin-bottom:10px;">
             <label class="field-label">Pilih Kantor Anda</label>
             <p id="op-kantor-hint" style="font-size:11px;color:#94a3b8;margin-top:2px;"></p>
           </div>
-
-          <!-- Kantor cards list -->
-          <div class="kantor-list" id="op-kantor-list">
-            <!-- diisi JS -->
-          </div>
-
-          <!-- Tombol -->
+          <div class="kantor-list" id="op-kantor-list"></div>
           <div style="display:flex;gap:8px;margin-top:16px;">
             <button type="button" onclick="opBackToStep1()" class="btn-ghost">
               <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span>
@@ -502,8 +532,6 @@ select.field { cursor: pointer; appearance: auto; }
               Masuk ke Sistem
             </button>
           </div>
-
-          <!-- Form hidden untuk submit -->
           <form id="op-final-form" method="POST" action="{{ route('login.post') }}" style="display:none;">
             @csrf
             <input type="hidden" name="role" value="operator"/>
@@ -513,7 +541,7 @@ select.field { cursor: pointer; appearance: auto; }
           </form>
         </div>
 
-        <!-- ══ STEP 3: Loading / Auto submit ══ -->
+        <!-- ══ STEP 3: Loading ══ -->
         <div id="op-step3" class="panel-anim" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px 0;text-align:center;">
           <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(34,197,94,.3);">
             <span class="material-symbols-outlined fill-icon" style="color:#fff;font-size:26px;animation:spin .9s linear infinite;" id="step3-spinner">progress_activity</span>
@@ -535,11 +563,7 @@ select.field { cursor: pointer; appearance: auto; }
 </div>
 
 <script>
-/* ════════════════════════════════════════
-   STEP INDICATOR HELPERS
-════════════════════════════════════════ */
 function setStep(step) {
-  // 1 = identitas, 2 = kantor, 3 = masuk
   for (var i = 1; i <= 3; i++) {
     var sc = document.getElementById('sc-' + i);
     var sl = document.getElementById('sl-' + i);
@@ -549,16 +573,10 @@ function setStep(step) {
       ? '<span class="material-symbols-outlined fill-icon" style="font-size:14px;color:#fff;">check</span>'
       : i;
   }
-  // lines
-  var l1 = document.getElementById('line-1');
-  var l2 = document.getElementById('line-2');
-  l1.className = 'step-line ' + (step > 1 ? 'done' : 'idle');
-  l2.className = 'step-line ' + (step > 2 ? 'done' : 'idle');
+  document.getElementById('line-1').className = 'step-line ' + (step > 1 ? 'done' : 'idle');
+  document.getElementById('line-2').className = 'step-line ' + (step > 2 ? 'done' : 'idle');
 }
 
-/* ════════════════════════════════════════
-   TRANSITION HELPERS
-════════════════════════════════════════ */
 function transitionTo(fromId, toId, afterFn) {
   var from = document.getElementById(fromId);
   var to   = document.getElementById(toId);
@@ -566,7 +584,7 @@ function transitionTo(fromId, toId, afterFn) {
   setTimeout(function() {
     from.style.display = 'none';
     from.classList.remove('out');
-    to.style.display = toId === 'op-step3' ? 'flex' : 'flex';
+    to.style.display = 'flex';
     to.style.flexDirection = 'column';
     to.style.gap = '14px';
     to.classList.remove('out');
@@ -575,9 +593,6 @@ function transitionTo(fromId, toId, afterFn) {
   }, 220);
 }
 
-/* ════════════════════════════════════════
-   STEP 1 → STEP 2: Cek kredensial
-════════════════════════════════════════ */
 function opCheckCredentials() {
   var btn    = document.getElementById('op-check-btn');
   var email  = document.getElementById('op-email').value.trim();
@@ -597,10 +612,7 @@ function opCheckCredentials() {
 
   fetch("{{ route('login.check') }}", {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    },
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
     body: JSON.stringify({ email: email, password: pass })
   })
   .then(function(res) { return res.json().then(function(d){ return { ok: res.ok, data: d }; }); })
@@ -616,12 +628,10 @@ function opCheckCredentials() {
 
     var kantors = r.data.kantors;
 
-    /* ── Single kantor: skip step 2, langsung step 3 ── */
     if (kantors.length === 1) {
       document.getElementById('op-email-hidden').value  = email;
       document.getElementById('op-pass-hidden').value   = pass;
       document.getElementById('op-kantor-hidden').value = kantors[0].value;
-
       setStep(3);
       transitionTo('op-step1', 'op-step3', function() {
         document.getElementById('step3-title').textContent = 'Masuk ke ' + kantors[0].label + '...';
@@ -631,7 +641,6 @@ function opCheckCredentials() {
       return;
     }
 
-    /* ── Multi kantor: tampilkan step 2 ── */
     document.getElementById('op-greeting').textContent = 'Halo, ' + r.data.nama + '!';
     document.getElementById('op-kantor-hint').textContent =
       'Anda memiliki akses ke ' + kantors.length + ' kantor. Pilih salah satu.';
@@ -645,13 +654,8 @@ function opCheckCredentials() {
       card.className = 'kantor-card' + (idx === 0 ? ' selected' : '');
       card.dataset.value = k.value;
       card.innerHTML =
-        '<div>' +
-          '<div class="kantor-card-name">' + k.label + '</div>' +
-          '<div class="kantor-card-loc">' +
-            '<span class="material-symbols-outlined fill-icon" style="font-size:12px;color:#94a3b8;">location_on</span>' +
-            k.label +
-          '</div>' +
-        '</div>' +
+        '<div><div class="kantor-card-name">' + k.label + '</div>' +
+        '<div class="kantor-card-loc"><span class="material-symbols-outlined fill-icon" style="font-size:12px;color:#94a3b8;">location_on</span>' + k.label + '</div></div>' +
         '<div class="kantor-radio"><div class="kantor-radio-dot"></div></div>';
       card.addEventListener('click', function() {
         list.querySelectorAll('.kantor-card').forEach(function(c) { c.classList.remove('selected'); });
@@ -661,10 +665,9 @@ function opCheckCredentials() {
       list.appendChild(card);
     });
 
-    /* simpan ke closure untuk submit */
-    window._opKantors       = kantors;
-    window._opEmail         = email;
-    window._opPass          = pass;
+    window._opKantors         = kantors;
+    window._opEmail           = email;
+    window._opPass            = pass;
     window._getSelectedKantor = function() { return selectedValue; };
 
     setStep(2);
@@ -678,17 +681,14 @@ function opCheckCredentials() {
   });
 }
 
-/* ════════════════════════════════════════
-   STEP 2 → STEP 3: Submit login
-════════════════════════════════════════ */
 function opSubmitLogin() {
-  var kantor   = window._getSelectedKantor ? window._getSelectedKantor() : '';
-  var kantors  = window._opKantors || [];
-  var label    = '';
+  var kantor  = window._getSelectedKantor ? window._getSelectedKantor() : '';
+  var kantors = window._opKantors || [];
+  var label   = '';
   kantors.forEach(function(k) { if (k.value === kantor) label = k.label; });
 
-  document.getElementById('op-email-hidden').value  = window._opEmail  || '';
-  document.getElementById('op-pass-hidden').value   = window._opPass   || '';
+  document.getElementById('op-email-hidden').value  = window._opEmail || '';
+  document.getElementById('op-pass-hidden').value   = window._opPass  || '';
   document.getElementById('op-kantor-hidden').value = kantor;
 
   setStep(3);
@@ -699,9 +699,6 @@ function opSubmitLogin() {
   });
 }
 
-/* ════════════════════════════════════════
-   STEP 2 → STEP 1: Kembali
-════════════════════════════════════════ */
 function opBackToStep1() {
   setStep(1);
   var s2 = document.getElementById('op-step2');
@@ -717,9 +714,6 @@ function opBackToStep1() {
   }, 220);
 }
 
-/* ════════════════════════════════════════
-   TAB SWITCH
-════════════════════════════════════════ */
 function switchTab(tab) {
   var isAdmin = tab === 'admin';
   var fAdmin  = document.getElementById('form-admin');
@@ -742,19 +736,13 @@ function switchTab(tab) {
   });
 }
 
-/* ════════════════════════════════════════
-   TOGGLE PASSWORD
-════════════════════════════════════════ */
 function togglePass(id, btn) {
   var inp  = document.getElementById(id);
   var icon = btn.querySelector('.material-symbols-outlined');
-  inp.type  = inp.type === 'password' ? 'text' : 'password';
+  inp.type = inp.type === 'password' ? 'text' : 'password';
   icon.textContent = inp.type === 'password' ? 'visibility' : 'visibility_off';
 }
 
-/* ════════════════════════════════════════
-   MOBILE LOGO
-════════════════════════════════════════ */
 (function() {
   var ml = document.querySelector('.mobile-logo');
   function check() { if (ml) ml.style.display = window.innerWidth <= 900 ? 'block' : 'none'; }
@@ -762,9 +750,6 @@ function togglePass(id, btn) {
   window.addEventListener('resize', check);
 })();
 
-/* ════════════════════════════════════════
-   AUTO SWITCH TAB (dari server redirect)
-════════════════════════════════════════ */
 @if(session('login_tab') === 'operator' || old('role') === 'operator')
 switchTab('operator');
 @endif

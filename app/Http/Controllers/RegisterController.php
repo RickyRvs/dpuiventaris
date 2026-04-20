@@ -4,18 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Session;
+use App\Models\AuditLog;
 use App\Models\Kantor;
 use App\Models\RegisterRequest;
+use App\Models\User;
 
 class RegisterController extends Controller
 {
     // ============================================================
-    // FORM REGISTRASI
+    // HELPER: Audit Log
+    // ============================================================
+
+    private function addAuditLog(
+        string $aksi,
+        string $modul,
+        string $icon = 'edit',
+        string $bg   = '#fff7ed',
+        string $ic   = '#f97316'
+    ): void {
+        AuditLog::create([
+            'user_name' => Session::get('user_name', 'System'),
+            'aksi'      => $aksi,
+            'modul'     => $modul,
+            'icon'      => $icon,
+            'bg'        => $bg,
+            'ic'        => $ic,
+        ]);
+    }
+
+    // ============================================================
+    // FORM REGISTRASI (publik)
     // ============================================================
 
     public function showForm()
     {
+        // Kalau sudah login, redirect ke dashboard
+        if (Session::has('user_name')) {
+            return redirect()->route('dashboard');
+        }
+
         $kantorList = Kantor::all();
         return view('auth.register', compact('kantorList'));
     }
@@ -28,7 +56,11 @@ class RegisterController extends Controller
     {
         $request->validate([
             'nama'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:register_requests,email|unique:users,email',
+            'email'     => [
+                'required', 'email',
+                'unique:register_requests,email',
+                'unique:users,email',
+            ],
             'password'  => 'required|string|min:8|confirmed',
             'peran'     => 'required|in:admin,operator',
             'kantor_id' => 'nullable|exists:kantors,id',
@@ -46,14 +78,14 @@ class RegisterController extends Controller
             'alasan.min'         => 'Alasan minimal 10 karakter.',
         ]);
 
-        // Kalau peran operator wajib pilih kantor
+        // Operator wajib pilih kantor
         if ($request->peran === 'operator' && !$request->kantor_id) {
             return back()
                 ->withErrors(['kantor_id' => 'Operator wajib memilih kantor.'])
                 ->withInput();
         }
 
-        // Buat pengajuan registrasi
+        // Generate initials & random color
         $parts    = explode(' ', trim($request->nama));
         $initials = strtoupper(
             substr($parts[0], 0, 1) .
@@ -81,7 +113,7 @@ class RegisterController extends Controller
         ]);
 
         return redirect()->route('register.success')
-            ->with('reg_nama', $request->nama)
+            ->with('reg_nama',  $request->nama)
             ->with('reg_email', $request->email);
     }
 
@@ -91,7 +123,6 @@ class RegisterController extends Controller
 
     public function success()
     {
-        // Kalau akses langsung tanpa submit, redirect ke register
         if (!session('reg_email')) {
             return redirect()->route('register');
         }
@@ -103,17 +134,7 @@ class RegisterController extends Controller
     }
 
     // ============================================================
-    // ADMIN: LIST PENGAJUAN REGISTRASI
-    // ============================================================
-
-    public function index()
-    {
-        $list = RegisterRequest::with('kantor')->latest()->paginate(20);
-        return view('pages.register-requests', compact('list'));
-    }
-
-    // ============================================================
-    // ADMIN: APPROVE REGISTRASI → Buat user baru
+    // ADMIN: APPROVE → Buat user baru
     // ============================================================
 
     public function approve(Request $request)
@@ -126,17 +147,20 @@ class RegisterController extends Controller
             return back()->withErrors(['Pengajuan ini sudah diproses.']);
         }
 
-        // Cek email belum ada di users
-        if (\App\Models\User::where('email', $reg->email)->exists()) {
-            $reg->update(['status' => 'Ditolak', 'catatan_admin' => 'Email sudah terdaftar di sistem.']);
-            return back()->with('success', 'Pengajuan ditolak otomatis karena email sudah ada.');
+        // Cek duplikat email di tabel users
+        if (User::where('email', $reg->email)->exists()) {
+            $reg->update([
+                'status'        => 'Ditolak',
+                'catatan_admin' => 'Email sudah terdaftar di sistem.',
+            ]);
+            return back()->with('success', 'Pengajuan ditolak otomatis karena email sudah ada di sistem.');
         }
 
-        // Buat user baru dari data pengajuan
-        \App\Models\User::create([
+        // Buat user baru
+        User::create([
             'nama'      => $reg->nama,
             'email'     => $reg->email,
-            'password'  => $reg->password, // Sudah di-hash saat pengajuan
+            'password'  => $reg->password, // sudah di-hash saat pengajuan
             'peran'     => $reg->peran,
             'kantor_id' => $reg->kantor_id,
             'initials'  => $reg->initials,
@@ -144,30 +168,30 @@ class RegisterController extends Controller
             'color2'    => $reg->color2,
         ]);
 
+        // Update status pengajuan
         $reg->update([
-            'status'        => 'Disetujui',
-            'approved_at'   => now(),
-            'approved_by'   => \Illuminate\Support\Facades\Session::get('user_name', 'Admin'),
+            'status'      => 'Disetujui',
+            'approved_at' => now(),
+            'approved_by' => Session::get('user_name', 'Admin'),
         ]);
 
-        // Audit log
-        app(InventarisController::class)->addAuditLogPublic(
+        $this->addAuditLog(
             "Menyetujui registrasi: {$reg->nama} ({$reg->email})",
             'User', 'how_to_reg', '#f0fdf4', '#16a34a'
         );
 
-        return back()->with('success', "Akun \"{$reg->nama}\" berhasil dibuat dan dapat login.");
+        return back()->with('success', "✓ Akun \"{$reg->nama}\" berhasil dibuat. User dapat login sekarang.");
     }
 
     // ============================================================
-    // ADMIN: TOLAK REGISTRASI
+    // ADMIN: REJECT
     // ============================================================
 
     public function reject(Request $request)
     {
         $request->validate([
-            'id'             => 'required|exists:register_requests,id',
-            'catatan_admin'  => 'nullable|string|max:255',
+            'id'            => 'required|exists:register_requests,id',
+            'catatan_admin' => 'nullable|string|max:255',
         ]);
 
         $reg = RegisterRequest::findOrFail($request->id);
@@ -181,11 +205,11 @@ class RegisterController extends Controller
             'catatan_admin' => $request->catatan_admin,
         ]);
 
-        app(InventarisController::class)->addAuditLogPublic(
+        $this->addAuditLog(
             "Menolak registrasi: {$reg->nama} ({$reg->email})",
             'User', 'person_remove', '#fef2f2', '#ef4444'
         );
 
-        return back()->with('success', "Pengajuan \"{$reg->nama}\" ditolak.");
+        return back()->with('success', "Pengajuan \"{$reg->nama}\" berhasil ditolak.");
     }
 }
