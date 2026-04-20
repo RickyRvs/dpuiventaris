@@ -140,28 +140,32 @@
       <div style="position:absolute;left:0;right:0;bottom:{{ round($gl/100*$chartH) }}px;border-top:1px dashed {{ $gl===0?'#cbd5e1':'#f1f5f9' }};"></div>
       @endforeach
       <div style="display:flex;align-items:flex-end;justify-content:center;height:{{ $chartH }}px;gap:32px;position:relative;z-index:1;">
+@php $hBaik = round($stat['baik'] / $maxGrup * $chartH); @endphp
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="bar-seg" data-h="{{ $hBaik }}"
+       style="position:relative;width:52px;height:0;background:#22c55e;border-radius:7px 7px 0 0;">
+    <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                 font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#fff;">{{ $stat['baik'] }}</span>
+  </div>
+</div>
 
-        @php $hBaik = round($stat['baik'] / $maxGrup * $chartH); @endphp
-        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-          <span style="font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#0f172a;">{{ $stat['baik'] }}</span>
-          <div class="bar-seg" data-h="{{ $hBaik }}"
-               style="width:52px;height:0;background:#22c55e;border-radius:7px 7px 0 0;"></div>
-        </div>
+@php $hPrb = round($stat['perbaikan'] / $maxGrup * $chartH); @endphp
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="bar-seg" data-h="{{ $hPrb }}"
+       style="position:relative;width:52px;height:0;background:#eab308;border-radius:7px 7px 0 0;">
+    <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                 font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#fff;">{{ $stat['perbaikan'] }}</span>
+  </div>
+</div>
 
-        @php $hPrb = round($stat['perbaikan'] / $maxGrup * $chartH); @endphp
-        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-          <span style="font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#0f172a;">{{ $stat['perbaikan'] }}</span>
-          <div class="bar-seg" data-h="{{ $hPrb }}"
-               style="width:52px;height:0;background:#eab308;border-radius:7px 7px 0 0;"></div>
-        </div>
-
-        @php $hRsk = round($stat['rusak'] / $maxGrup * $chartH); @endphp
-        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-          <span style="font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#0f172a;">{{ $stat['rusak'] }}</span>
-          <div class="bar-seg" data-h="{{ $hRsk }}"
-               style="width:52px;height:0;background:#ef4444;border-radius:7px 7px 0 0;"></div>
-        </div>
-
+@php $hRsk = round($stat['rusak'] / $maxGrup * $chartH); @endphp
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="bar-seg" data-h="{{ $hRsk }}"
+       style="position:relative;width:52px;height:0;background:#ef4444;border-radius:7px 7px 0 0;">
+    <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                 font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#fff;">{{ $stat['rusak'] }}</span>
+  </div>
+</div>
       </div>
     </div>
   </div>
