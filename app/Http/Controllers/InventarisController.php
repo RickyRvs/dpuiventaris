@@ -657,13 +657,50 @@ class InventarisController extends Controller
     // LAPORAN
     // ============================================================
 
-    public function laporan()
+public function laporan()
     {
+        if ($this->isAdmin()) {
+            // Admin: semua kantor
+            $kantorList = $this->buildLaporanData();
+            $totalNilaiRaw = \App\Models\Aset::sum('nilai');
+            $kantorName = 'Semua Kantor';
+            $asetList = collect(); // admin tidak butuh tabel aset detail
+            $kantorDbId = null;
+        } else {
+            // Operator: hanya kantor yang sedang aktif di session
+            $kantorDbId = $this->kantorDbId();
+            $kantor = Kantor::find($kantorDbId);
+            $kantorName = $kantor?->nama ?? 'Kantor';
+ 
+            $asets = \App\Models\Aset::where('kantor_id', $kantorDbId)->get();
+ 
+            $kantorList = [[
+                'id'    => $kantor?->id,
+                'nama'  => $kantor?->nama ?? '-',
+                'short' => $kantor?->short_name ?? '-',
+                'stat'  => [
+                    'total'     => $asets->count(),
+                    'baik'      => $asets->where('kondisi', 'Baik')->count(),
+                    'perbaikan' => $asets->where('kondisi', 'Dalam Perbaikan')->count(),
+                    'rusak'     => $asets->where('kondisi', 'Rusak')->count(),
+                    'nilai'     => $this->formatNilai($asets->sum('nilai')),
+                ],
+            ]];
+ 
+            $totalNilaiRaw = $asets->sum('nilai');
+            $asetList = \App\Models\Aset::where('kantor_id', $kantorDbId)->latest()->get();
+        }
+ 
         return view('pages.laporan', [
-            'isAdmin'    => $this->isAdmin(),
-            'kantorList' => $this->buildLaporanData(),
+            'isAdmin'      => $this->isAdmin(),
+            'kantorList'   => $kantorList,
+            'kantorName'   => $kantorName,
+            'kantorDbId'   => $kantorDbId ?? null,
+            'totalNilaiRaw'=> $totalNilaiRaw,
+            'asetList'     => $asetList,
         ]);
     }
+ 
 
     public function eksporPdf()
     {
