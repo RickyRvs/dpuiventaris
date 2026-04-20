@@ -39,7 +39,6 @@ class RegisterController extends Controller
 
     public function showForm()
     {
-        // Kalau sudah login, redirect ke dashboard
         if (Session::has('user_name')) {
             return redirect()->route('dashboard');
         }
@@ -55,16 +54,17 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama'      => 'required|string|max:255',
-            'email'     => [
+            'nama'         => 'required|string|max:255',
+            'email'        => [
                 'required', 'email',
                 'unique:register_requests,email',
                 'unique:users,email',
             ],
-            'password'  => 'required|string|min:8|confirmed',
-            'peran'     => 'required|in:admin,operator',
-            'kantor_id' => 'nullable|exists:kantors,id',
-            'alasan'    => 'required|string|min:10|max:500',
+            'password'     => 'required|string|min:8|confirmed',
+            'peran'        => 'required|in:admin,operator',
+            'kantor_ids'   => $request->peran === 'operator' ? 'required|array|min:1' : 'nullable|array',
+            'kantor_ids.*' => 'exists:kantors,id',
+            'alasan'       => 'required|string|min:10|max:500',
         ], [
             'nama.required'      => 'Nama lengkap wajib diisi.',
             'email.required'     => 'Email wajib diisi.',
@@ -74,16 +74,11 @@ class RegisterController extends Controller
             'password.min'       => 'Kata sandi minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
             'peran.required'     => 'Pilih peran akun.',
+            'kantor_ids.required'=> 'Operator wajib memilih minimal 1 kantor.',
+            'kantor_ids.min'     => 'Operator wajib memilih minimal 1 kantor.',
             'alasan.required'    => 'Alasan pengajuan wajib diisi.',
             'alasan.min'         => 'Alasan minimal 10 karakter.',
         ]);
-
-        // Operator wajib pilih kantor
-        if ($request->peran === 'operator' && !$request->kantor_id) {
-            return back()
-                ->withErrors(['kantor_id' => 'Operator wajib memilih kantor.'])
-                ->withInput();
-        }
 
         // Generate initials & random color
         $parts    = explode(' ', trim($request->nama));
@@ -100,16 +95,17 @@ class RegisterController extends Controller
         $c = $colors[array_rand($colors)];
 
         RegisterRequest::create([
-            'nama'      => $request->nama,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'peran'     => $request->peran,
-            'kantor_id' => $request->peran === 'operator' ? $request->kantor_id : null,
-            'alasan'    => $request->alasan,
-            'status'    => 'Menunggu',
-            'initials'  => $initials ?: 'US',
-            'color1'    => $c[0],
-            'color2'    => $c[1],
+            'nama'       => $request->nama,
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password),
+            'peran'      => $request->peran,
+            'kantor_id'  => null, // legacy, tidak dipakai lagi
+            'kantor_ids' => $request->peran === 'operator' ? $request->kantor_ids : null,
+            'alasan'     => $request->alasan,
+            'status'     => 'Menunggu',
+            'initials'   => $initials ?: 'US',
+            'color1'     => $c[0],
+            'color2'     => $c[1],
         ]);
 
         return redirect()->route('register.success')
@@ -134,7 +130,7 @@ class RegisterController extends Controller
     }
 
     // ============================================================
-    // ADMIN: APPROVE → Buat user baru
+    // ADMIN: APPROVE → Buat user baru + attach kantors
     // ============================================================
 
     public function approve(Request $request)
@@ -147,7 +143,7 @@ class RegisterController extends Controller
             return back()->withErrors(['Pengajuan ini sudah diproses.']);
         }
 
-        // Cek duplikat email di tabel users
+        // Cek duplikat email
         if (User::where('email', $reg->email)->exists()) {
             $reg->update([
                 'status'        => 'Ditolak',
@@ -157,16 +153,21 @@ class RegisterController extends Controller
         }
 
         // Buat user baru
-        User::create([
+        $user = User::create([
             'nama'      => $reg->nama,
             'email'     => $reg->email,
-            'password'  => $reg->password, // sudah di-hash saat pengajuan
+            'password'  => $reg->password, // sudah di-hash
             'peran'     => $reg->peran,
-            'kantor_id' => $reg->kantor_id,
+            'kantor_id' => null, // pakai pivot
             'initials'  => $reg->initials,
             'color1'    => $reg->color1,
             'color2'    => $reg->color2,
         ]);
+
+        // ✅ Attach kantors ke pivot table user_kantors
+        if ($reg->peran === 'operator' && !empty($reg->kantor_ids)) {
+            $user->kantors()->attach($reg->kantor_ids);
+        }
 
         // Update status pengajuan
         $reg->update([

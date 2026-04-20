@@ -12,6 +12,7 @@ use App\Models\Kantor;
 use App\Models\Mutasi;
 use App\Models\Stok;
 use App\Models\User;
+use App\Models\RegisterRequest;
 
 class InventarisController extends Controller
 {
@@ -105,7 +106,7 @@ class InventarisController extends Controller
         $email    = $request->input('email');
         $password = $request->input('password');
 
-        $user = User::where('email', $email)->first();
+        $user = User::where('email', $email)->with(['kantor', 'kantors'])->first();
 
         if (!$user || !Hash::check($password, $user->password)) {
             return back()->withErrors(['Email atau kata sandi salah.'])->withInput();
@@ -116,12 +117,25 @@ class InventarisController extends Controller
         if ($role === 'operator' && $user->peran !== 'operator') {
             return back()->withErrors(['Akun ini bukan Operator.'])->withInput();
         }
+
+        // ✅ FIX: Validasi kantor dari pivot, bukan kantor_id legacy
         if ($role === 'operator') {
-            $kantorKode = $request->input('kantor', 'pku');
+            $kantorKode = $request->input('kantor');
             $kantor     = Kantor::where('kode', $kantorKode)->first();
-            if ($kantor && $user->kantor_id !== null && $user->kantor_id !== $kantor->id) {
+
+            if (!$kantor) {
+                return back()->withErrors(['Pilih kantor yang valid.'])->withInput();
+            }
+
+            // hasKantor() sudah handle pivot + legacy sekaligus
+            if (!$user->hasKantor($kantor->id)) {
                 return back()->withErrors(['Kantor yang dipilih tidak sesuai dengan akun Anda.'])->withInput();
             }
+
+            // ✅ Set session dari kantor yang benar-benar dipilih user
+            Session::put('kantor_db_id', $kantor->id);
+            Session::put('kantor_id',    $kantor->kode);
+            Session::put('kantor_name',  $kantor->short_name);
         }
 
         $user->update(['last_login_at' => now()]);
@@ -132,11 +146,7 @@ class InventarisController extends Controller
         Session::put('user_role',  $user->peran === 'admin' ? 'Administrator' : 'Operator');
         Session::put('user_type',  $user->peran);
 
-        if ($user->peran === 'operator') {
-            Session::put('kantor_db_id', $user->kantor_id);
-            Session::put('kantor_id',    $user->kantor?->kode ?? 'pku');
-            Session::put('kantor_name',  $user->kantor?->short_name ?? '');
-        } else {
+        if ($user->peran === 'admin') {
             Session::put('kantor_db_id', null);
             Session::put('kantor_id',    'all');
         }
@@ -145,9 +155,12 @@ class InventarisController extends Controller
         return redirect()->route('dashboard');
     }
 
+    // ✅ FIX: Baca pivot kantors, bukan fallback ke Kantor::all()
     public function loginCheck(Request $request)
     {
-        $user = User::where('email', $request->input('email'))->with('kantor')->first();
+        $user = User::where('email', $request->input('email'))
+                    ->with(['kantor', 'kantors'])
+                    ->first();
 
         if (!$user || !Hash::check($request->input('password'), $user->password)) {
             return response()->json(['error' => 'Email atau kata sandi salah.'], 401);
@@ -156,16 +169,20 @@ class InventarisController extends Controller
             return response()->json(['error' => 'Akun ini bukan Operator.'], 403);
         }
 
-        if ($user->kantor_id) {
+        // Prioritaskan pivot kantors, fallback ke legacy kantor_id
+        $pivotKantors = $user->kantors;
+        if ($pivotKantors->isNotEmpty()) {
+            $kantors = $pivotKantors->map(fn($k) => [
+                'value' => $k->kode,
+                'label' => $k->nama,
+            ])->values()->toArray();
+        } elseif ($user->kantor_id && $user->kantor) {
             $kantors = [[
                 'value' => $user->kantor->kode,
                 'label' => $user->kantor->nama,
             ]];
         } else {
-            $kantors = Kantor::all()->map(fn($k) => [
-                'value' => $k->kode,
-                'label' => $k->nama,
-            ])->values()->toArray();
+            return response()->json(['error' => 'Akun belum memiliki kantor yang ditugaskan. Hubungi Admin.'], 403);
         }
 
         return response()->json([
@@ -650,9 +667,9 @@ class InventarisController extends Controller
 
     public function eksporPdf()
     {
-        $kantorList     = $this->buildLaporanData();
-        $asetList       = $this->asetQuery()->with('kantor')->latest()->get();
-        $allAset        = Aset::all();
+        $kantorList = $this->buildLaporanData();
+        $asetList   = $this->asetQuery()->with('kantor')->latest()->get();
+        $allAset    = Aset::all();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('exports.laporan-pdf', [
             'kantorList'     => $kantorList,
@@ -729,14 +746,19 @@ class InventarisController extends Controller
     // MANAJEMEN USER
     // ============================================================
 
+    // ✅ FIX: Baca kantor dari pivot kantors, bukan kantor_id legacy
     public function manajemenUser()
     {
-        $userList = User::with('kantor')->latest()->get()->map(fn($u) => [
+        $userList = User::with(['kantor', 'kantors'])->latest()->get()->map(fn($u) => [
             'id'         => $u->id,
             'nama'       => $u->nama,
             'email'      => $u->email,
             'peran'      => ucfirst($u->peran),
-            'kantor'     => $u->peran === 'admin' ? 'Semua Kantor' : ($u->kantor?->short_name ?? '-'),
+            'kantor'     => $u->peran === 'admin'
+                ? 'Semua Kantor'
+                : ($u->kantors->isNotEmpty()
+                    ? $u->kantors->pluck('short_name')->join(', ')
+                    : ($u->kantor?->short_name ?? '-')),
             'initials'   => $u->initials ?? strtoupper(substr($u->nama, 0, 2)),
             'color1'     => $u->color1 ?? '#f97316',
             'color2'     => $u->color2 ?? '#c2410c',
@@ -744,7 +766,9 @@ class InventarisController extends Controller
             'last_login' => $u->last_login_at?->translatedFormat('d M Y, H:i') ?? 'Belum pernah',
         ])->toArray();
 
-        return view('pages.manajemen-user', array_merge($this->sharedViewData(), compact('userList')));
+        $registerRequests = RegisterRequest::with('kantor')->latest()->get();
+
+        return view('pages.manajemen-user', array_merge($this->sharedViewData(), compact('userList', 'registerRequests')));
     }
 
     public function storeUser(Request $request)

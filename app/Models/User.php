@@ -2,54 +2,88 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasFactory, Notifiable;
+    protected $table = 'users';
 
     protected $fillable = [
-        'nama', 'email', 'password',
-        'peran', 'kantor_id',
-        'initials', 'color1', 'color2',
+        'nama',
+        'email',
+        'password',
+        'peran',
+        'kantor_id',   // legacy single kantor (nullable)
+        'initials',
+        'color1',
+        'color2',
         'last_login_at',
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password'];
 
     protected $casts = [
         'last_login_at' => 'datetime',
-        'password'      => 'hashed',
     ];
 
+    // ── Relations ──────────────────────────────────────────────
+
+    /**
+     * Legacy: single kantor (untuk backward compat).
+     */
     public function kantor(): BelongsTo
     {
-        return $this->belongsTo(Kantor::class);
+        return $this->belongsTo(Kantor::class, 'kantor_id');
     }
 
-    public function mutasis(): HasMany
+    /**
+     * ✅ Multi kantor via pivot table user_kantors.
+     */
+    public function kantors(): BelongsToMany
     {
-        return $this->hasMany(Mutasi::class, 'pengaju_id');
+        return $this->belongsToMany(Kantor::class, 'user_kantors', 'user_id', 'kantor_id')
+                    ->withTimestamps();
     }
 
-    public function getBergabungAttribute(): string
+    // ── Helpers ────────────────────────────────────────────────
+
+    /**
+     * Ambil semua kantor user (pivot dulu, fallback ke legacy kantor_id).
+     */
+    public function getAllKantorsAttribute()
     {
-        return $this->created_at?->translatedFormat('M Y') ?? '-';
+        $pivotKantors = $this->kantors;
+        if ($pivotKantors->isNotEmpty()) {
+            return $pivotKantors;
+        }
+        if ($this->kantor_id) {
+            return Kantor::where('id', $this->kantor_id)->get();
+        }
+        return collect();
     }
 
-    public function getLastLoginFormattedAttribute(): string
+    /**
+     * Nama kantor dipisah koma.
+     */
+    public function getKantorNamaListAttribute(): string
     {
-        return $this->last_login_at?->translatedFormat('d M Y, H:i') ?? '-';
+        return $this->all_kantors->pluck('short_name')->join(', ') ?: 'Semua Kantor';
     }
 
-    public function getKantorNamaAttribute(): string
+    /**
+     * Cek apakah user punya akses ke kantor tertentu (by ID).
+     */
+    public function hasKantor(int $kantorId): bool
     {
-        return $this->peran === 'admin'
-            ? 'Semua Kantor'
-            : ($this->kantor?->short_name ?? '-');
+        if ($this->peran === 'admin') return true;
+
+        $pivotIds = $this->kantors->pluck('id')->toArray();
+        if (!empty($pivotIds)) {
+            return in_array($kantorId, $pivotIds);
+        }
+
+        return $this->kantor_id === $kantorId;
     }
 }
