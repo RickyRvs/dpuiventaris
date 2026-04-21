@@ -142,7 +142,7 @@
                   {{-- Logo kecil --}}
                   <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
                     <div style="width:20px;height:20px;background:linear-gradient(135deg,#f97316,#c2410c);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:7px;color:#fff;flex-shrink:0;">DPU</div>
-                    <span style="font-size:9px;font-weight:700;color:rgba(249,115,22,.8);text-transform:uppercase;letter-spacing:.1em;">PT. Dian Pilar Utama</span>
+                    <span style="font-size:9px;font-weight:700;color:rgba(249,115,22,.8);text-transform:uppercase;letter-spacing:.1em;">PT. Dian Bangun Sejahtera</span>
                   </div>
                   <div id="qr-label-nama" style="font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#fff;line-height:1.3;margin-bottom:6px;word-break:break-word;"></div>
                   <div style="display:flex;flex-direction:column;gap:3px;">

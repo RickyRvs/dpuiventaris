@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Login | Sistem Inventaris DPU</title>
+<title>Login | Sistem Inventaris DBS</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
@@ -281,9 +281,9 @@ select.field { cursor: pointer; appearance: auto; }
 
     <div style="position:relative;z-index:1;">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:52px;">
-        <div style="width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;box-shadow:0 6px 24px rgba(249,115,22,.45);flex-shrink:0;">DPU</div>
+        <div style="width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;box-shadow:0 6px 24px rgba(249,115,22,.45);flex-shrink:0;">DBS</div>
         <div>
-          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-.01em;">Dian Pilar Utama</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-.01em;">Dian Bangun Sejahtera</div>
           <div style="font-size:10px;font-weight:700;color:rgba(249,115,22,.75);text-transform:uppercase;letter-spacing:.12em;margin-top:2px;">Sistem Inventaris v1</div>
         </div>
       </div>
@@ -294,7 +294,7 @@ select.field { cursor: pointer; appearance: auto; }
         Terpusat.
       </h1>
       <p style="color:#94a3b8;font-size:14px;line-height:1.75;max-width:320px;">
-        Platform manajemen inventaris terpadu untuk seluruh cabang PT. Dian Pilar Utama — dari Pekanbaru hingga seluruh nusantara.
+        Platform manajemen inventaris terpadu untuk seluruh cabang PT. Dian Bangun Sejahtera — dari Pekanbaru hingga seluruh nusantara.
       </p>
 
       <div style="margin-top:32px;display:flex;flex-direction:column;gap:10px;">
@@ -342,9 +342,9 @@ select.field { cursor: pointer; appearance: auto; }
       <!-- Logo mobile only -->
       <div class="mobile-logo" style="display:none;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px;">
-          <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:13px;color:#fff;">DPU</div>
+          <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:13px;color:#fff;">DBS</div>
           <div>
-            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#0f172a;">Dian Pilar Utama</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#0f172a;">Dian Bangun Sejahtera</div>
             <div style="font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em;">Sistem Inventaris v1</div>
           </div>
         </div>
@@ -388,7 +388,7 @@ select.field { cursor: pointer; appearance: auto; }
             <label class="field-label">Email</label>
             <div style="position:relative;">
               <span class="material-symbols-outlined" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#cbd5e1;font-size:17px;">person</span>
-              <input type="email" name="email" placeholder="admin@dianpilar.co.id" class="field" style="padding-left:40px;" value="{{ old('email', 'admin@dianpilar.co.id') }}"/>
+              <input type="email" name="email" placeholder="admin@dianbangun.co.id" class="field" style="padding-left:40px;" value="{{ old('email', 'admin@dianbangun.co.id') }}"/>
             </div>
           </div>
 
@@ -405,7 +405,7 @@ select.field { cursor: pointer; appearance: auto; }
 
           <div class="demo-badge">
             <span class="material-symbols-outlined fill-icon" style="font-size:15px;color:#16a34a;flex-shrink:0;">info</span>
-            <span><strong>Demo:</strong> admin@dianpilar.co.id / admin123</span>
+            <span><strong>Demo:</strong> admin@dianbangun.co.id / admin123</span>
           </div>
 
           <button type="submit" class="btn-or">
@@ -471,7 +471,7 @@ select.field { cursor: pointer; appearance: auto; }
             <label class="field-label">Email</label>
             <div style="position:relative;">
               <span class="material-symbols-outlined" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#cbd5e1;font-size:17px;">person</span>
-              <input id="op-email" type="email" placeholder="operator@dianpilar.co.id" class="field" style="padding-left:40px;" value="{{ old('email', 'operator@dianpilar.co.id') }}"/>
+              <input id="op-email" type="email" placeholder="operator@dianbangun.co.id" class="field" style="padding-left:40px;" value="{{ old('email', 'operator@dianbangun.co.id') }}"/>
             </div>
           </div>
 
@@ -488,7 +488,7 @@ select.field { cursor: pointer; appearance: auto; }
 
           <div class="demo-badge">
             <span class="material-symbols-outlined fill-icon" style="font-size:15px;color:#16a34a;flex-shrink:0;">info</span>
-            <span><strong>Demo:</strong> operator@dianpilar.co.id / operator123</span>
+            <span><strong>Demo:</strong> operator@dianbangun.co.id / operator123</span>
           </div>
 
           <button type="button" onclick="opCheckCredentials()" id="op-check-btn" class="btn-or">
@@ -556,7 +556,7 @@ select.field { cursor: pointer; appearance: auto; }
       <!-- /form-operator -->
 
       <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:20px;">
-        PT. Dian Pilar Utama &copy; {{ date('Y') }} · Sistem Inventaris v1.0
+        PT. Dian Bangun Sejahtera &copy; {{ date('Y') }} · Sistem Inventaris v1.0
       </p>
     </div>
   </section>

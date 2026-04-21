@@ -189,11 +189,11 @@
       <div class="kop-logo-placeholder">DPU</div>
     </div>
     <div class="kop-text">
-      <div class="company">PT. Dian Pilar Utama</div>
+      <div class="company">PT. Dian Bangun Sejahtera</div>
       <div class="address">
         Jl. Contoh No. 123, Jakarta Selatan 12345<br/>
-        Telp: (021) 000-0000 &nbsp;|&nbsp; Email: info@dianpilarutama.co.id<br/>
-        Website: www.dianpilarutama.co.id
+        Telp: (021) 000-0000 &nbsp;|&nbsp; Email: info@dianbangunsejahetera.co.id<br/>
+        Website: www.dianbangunsejahetera.co.id
       </div>
     </div>
   </div>
@@ -213,7 +213,7 @@
     tanggal
     <strong>{{ \Carbon\Carbon::parse($ba->tanggal_serah_terima)->translatedFormat('d F Y') }}</strong>,
     kami yang bertanda tangan di bawah ini telah melaksanakan serah terima aset/barang inventaris
-    milik <strong>PT. Dian Pilar Utama</strong> dengan ketentuan sebagaimana tercantum dalam
+    milik <strong>PT. Dian Bangun Sejahtera</strong> dengan ketentuan sebagaimana tercantum dalam
     berita acara ini.
   </p>
 
@@ -237,7 +237,7 @@
     <tr>
       <td class="label">Instansi</td>
       <td class="sep">:</td>
-      <td class="value">PT. Dian Pilar Utama — {{ $ba->kantor?->nama ?? 'Kantor Pusat' }}</td>
+      <td class="value">PT. Dian Bangun Sejahtera — {{ $ba->kantor?->nama ?? 'Kantor Pusat' }}</td>
     </tr>
   </table>
 
@@ -309,7 +309,7 @@
     <strong>{{ $ba->aset_kondisi ?? 'sebagaimana adanya' }}</strong>, dan Pihak Kedua
     menyatakan telah menerima aset/barang tersebut dengan baik dan akan bertanggung jawab
     atas pemeliharaan dan penggunaannya sesuai ketentuan yang berlaku di
-    <strong>PT. Dian Pilar Utama</strong>.
+    <strong>PT. Dian Bangun Sejahtera</strong>.
   </p>
 
   <p class="narasi" style="margin-top:8px;">
@@ -332,7 +332,7 @@
       <div class="sign-line"></div>
       <div class="nama">{{ $ba->pihak_pertama_nama }}</div>
       <div class="jabatan">{{ $ba->pihak_pertama_jabatan }}</div>
-      <div class="jabatan">PT. Dian Pilar Utama</div>
+      <div class="jabatan">PT. Dian Bangun Sejahtera</div>
     </div>
 
     {{-- Pihak Kedua --}}
@@ -348,13 +348,13 @@
       <div class="sign-line"></div>
       <div class="nama">{{ $ba->pihak_kedua_nama }}</div>
       <div class="jabatan">{{ $ba->pihak_kedua_jabatan }}</div>
-      <div class="jabatan">{{ $ba->kantor?->short_name ?? 'PT. Dian Pilar Utama' }}</div>
+      <div class="jabatan">{{ $ba->kantor?->short_name ?? 'PT. Dian Bangun Sejahtera' }}</div>
     </div>
   </div>
 
   {{-- ── FOOTER ── --}}
   <div class="footer">
-    Dokumen ini dicetak dari Sistem Inventaris PT. Dian Pilar Utama &nbsp;|&nbsp;
+    Dokumen ini dicetak dari Sistem Inventaris PT. Dian Bangun Sejahtera &nbsp;|&nbsp;
     Dibuat oleh: <span class="highlight">{{ $ba->dibuat_oleh ?? 'System' }}</span> &nbsp;|&nbsp;
     Dicetak pada: <span class="highlight">{{ now()->translatedFormat('d F Y, H:i') }} WIB</span>
     <br/>

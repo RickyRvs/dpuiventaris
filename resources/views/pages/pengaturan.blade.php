@@ -11,7 +11,7 @@
       <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Sora',sans-serif;font-weight:800;font-size:18px;flex-shrink:0;">{{ strtoupper(substr(session('user_name','U'),0,2)) }}</div>
       <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
         <input type="text" value="{{ session('user_name','Ahmad Santoso') }}" class="field"/>
-        <input type="email" value="{{ session('user_email','admin@dianpilar.co.id') }}" class="field"/>
+        <input type="email" value="{{ session('user_email','admin@dianbangun.co.id') }}" class="field"/>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">

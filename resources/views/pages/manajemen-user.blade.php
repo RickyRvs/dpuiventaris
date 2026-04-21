@@ -267,7 +267,7 @@
 
         <div>
           <label style="display:block;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Email *</label>
-          <input type="email" name="email" class="field" placeholder="email@dianpilar.co.id" required value="{{ old('email') }}"/>
+          <input type="email" name="email" class="field" placeholder="email@dianbangun.co.id" required value="{{ old('email') }}"/>
         </div>
 
         <div id="modal-kantor-wrap">

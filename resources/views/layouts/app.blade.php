@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Sistem Inventaris | PT. Dian Pilar Utama</title>
+<title>Sistem Inventaris | PT. Dian Bangun Sejahtera</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
@@ -206,9 +206,9 @@ select.field { cursor:pointer; }
 
     <div style="flex-shrink:0;padding:16px;border-bottom:1px solid rgba(249,115,22,.15);">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:12px;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(249,115,22,.4);">DPU</div>
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:12px;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(249,115,22,.4);">DBS</div>
         <div>
-          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:12.5px;color:#fff;line-height:1.2;">Dian Pilar Utama</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:12.5px;color:#fff;line-height:1.2;">Dian Bangun Sejahtera</div>
           <div style="font-size:10px;color:rgba(249,115,22,.7);font-weight:600;text-transform:uppercase;letter-spacing:.08em;">Inventaris v1</div>
         </div>
       </div>
@@ -259,7 +259,7 @@ select.field { cursor:pointer; }
         <span class="material-symbols-outlined" style="color:#ef4444;">logout</span> Keluar
       </a>
       <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
-      <div style="font-size:10px;color:#475569;text-align:center;margin-top:8px;">Sistem Inventaris DPU v1.0</div>
+      <div style="font-size:10px;color:#475569;text-align:center;margin-top:8px;">Sistem Inventaris DBS v1.0</div>
     </div>
 
   </aside>

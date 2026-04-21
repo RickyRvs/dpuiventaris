@@ -202,7 +202,7 @@ body { font-size: 10px; color: #1e293b; background: #fff; }
           <div class="logo-box">DPU</div>
         </td>
         <td style="padding-left:12px;">
-          <div class="company-name">PT. Dian Pilar Utama</div>
+          <div class="company-name">PT. Dian Bangun Sejahtera</div>
           <div class="company-sub">Sistem Inventaris v1.0</div>
         </td>
         <td style="text-align:right;">
@@ -367,7 +367,7 @@ body { font-size: 10px; color: #1e293b; background: #fff; }
 <div class="footer-wrap">
   <table class="footer-table">
     <tr>
-      <td>PT. Dian Pilar Utama &copy; {{ date('Y') }} — Sistem Inventaris v1.0</td>
+      <td>PT. Dian Bangun Sejahtera &copy; {{ date('Y') }} — Sistem Inventaris v1.0</td>
       <td style="text-align:right;">Halaman 1 dari 2 — Dokumen ini digenerate otomatis oleh sistem</td>
     </tr>
   </table>
@@ -386,7 +386,7 @@ body { font-size: 10px; color: #1e293b; background: #fff; }
       <tr>
         <td style="width:56px;"><div class="logo-box">DPU</div></td>
         <td style="padding-left:12px;">
-          <div class="company-name">PT. Dian Pilar Utama</div>
+          <div class="company-name">PT. Dian Bangun Sejahtera</div>
           <div class="company-sub">Detail Data Aset</div>
         </td>
         <td style="text-align:right;">
@@ -461,7 +461,7 @@ body { font-size: 10px; color: #1e293b; background: #fff; }
 <div class="footer-wrap">
   <table class="footer-table">
     <tr>
-      <td>PT. Dian Pilar Utama &copy; {{ date('Y') }} — Sistem Inventaris v1.0</td>
+      <td>PT. Dian Bangun Sejahtera &copy; {{ date('Y') }} — Sistem Inventaris v1.0</td>
       <td style="text-align:right;">Halaman 2 dari 2 — Dokumen ini digenerate otomatis oleh sistem</td>
     </tr>
   </table>

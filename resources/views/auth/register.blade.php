@@ -119,14 +119,14 @@ textarea.field { resize: vertical; min-height: 76px; line-height: 1.5; }
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:52px;">
         <div style="width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;box-shadow:0 6px 24px rgba(249,115,22,.45);flex-shrink:0;">DPU</div>
         <div>
-          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-.01em;">Dian Pilar Utama</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-.01em;">Dian Bangun Sejahtera</div>
           <div style="font-size:10px;font-weight:700;color:rgba(249,115,22,.75);text-transform:uppercase;letter-spacing:.12em;margin-top:2px;">Sistem Inventaris v1</div>
         </div>
       </div>
       <h1 style="font-weight:800;font-size:40px;color:#fff;line-height:1.1;margin-bottom:18px;letter-spacing:-.02em;">
         Bergabung.<br/><span style="color:#f97316;">Daftarkan</span><br/>Akunmu.
       </h1>
-      <p style="color:#94a3b8;font-size:14px;line-height:1.75;max-width:320px;">Ajukan akses ke sistem inventaris PT. Dian Pilar Utama. Pengajuan akan ditinjau oleh Admin sebelum akun diaktifkan.</p>
+      <p style="color:#94a3b8;font-size:14px;line-height:1.75;max-width:320px;">Ajukan akses ke sistem inventaris PT. Dian Bangun Sejahtera. Pengajuan akan ditinjau oleh Admin sebelum akun diaktifkan.</p>
       <div style="margin-top:32px;display:flex;flex-direction:column;gap:10px;">
         @foreach([['verified_user','Pengajuan diverifikasi Admin'],['lock','Data aman & terenkripsi'],['apartment','Akses sesuai kantor yang dipilih']] as [$ic,$tx])
         <div style="display:flex;align-items:center;gap:10px;">
@@ -159,7 +159,7 @@ textarea.field { resize: vertical; min-height: 76px; line-height: 1.5; }
         <div style="display:flex;align-items:center;gap:10px;">
           <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:13px;color:#fff;">DPU</div>
           <div>
-            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#0f172a;">Dian Pilar Utama</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#0f172a;">Dian Bangun Sejahtera</div>
             <div style="font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.08em;">Sistem Inventaris v1</div>
           </div>
         </div>
@@ -210,7 +210,7 @@ textarea.field { resize: vertical; min-height: 76px; line-height: 1.5; }
               <label class="field-label">Email</label>
               <div style="position:relative;">
                 <span class="material-symbols-outlined" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#cbd5e1;font-size:17px;">mail</span>
-                <input id="inp-email" name="email" type="email" placeholder="email@dianpilar.co.id" class="field {{ $errors->has('email') ? 'error' : '' }}" style="padding-left:40px;" value="{{ old('email') }}"/>
+                <input id="inp-email" name="email" type="email" placeholder="email@dianbangun.co.id" class="field {{ $errors->has('email') ? 'error' : '' }}" style="padding-left:40px;" value="{{ old('email') }}"/>
               </div>
               @error('email')<div class="field-error"><span class="material-symbols-outlined fill-icon" style="font-size:12px;">error</span>{{ $message }}</div>@enderror
             </div>
@@ -338,7 +338,7 @@ textarea.field { resize: vertical; min-height: 76px; line-height: 1.5; }
         Sudah punya akun? <a href="{{ route('login') }}" style="color:#f97316;font-weight:700;text-decoration:none;">Masuk di sini</a>
       </p>
       <p style="text-align:center;font-size:11px;color:#cbd5e1;margin-top:8px;">
-        PT. Dian Pilar Utama &copy; {{ date('Y') }} · Sistem Inventaris v1.0
+        PT. Dian Bangun Sejahtera &copy; {{ date('Y') }} · Sistem Inventaris v1.0
       </p>
     </div>
   </section>
