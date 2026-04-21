@@ -237,6 +237,12 @@ select.field { cursor:pointer; }
       <a href="{{ route('jadwal') }}"     class="nav-item {{ request()->routeIs('jadwal')     ? 'active':'' }}"><span class="material-symbols-outlined">event</span> Jadwal Pemeliharaan</a>
       <a href="{{ route('stok') }}"       class="nav-item {{ request()->routeIs('stok')       ? 'active':'' }}"><span class="material-symbols-outlined">shelves</span> Manajemen Stok</a>
       <a href="{{ route('qr-label') }}"   class="nav-item {{ request()->routeIs('qr-label')   ? 'active':'' }}"><span class="material-symbols-outlined">qr_code_2</span> QR & Label</a>
+      <a href="{{ route('berita-acara') }}"
+   class="nav-item {{ request()->routeIs('berita-acara*') ? 'active' : '' }}">
+    <span class="material-symbols-outlined">description</span>
+    Berita Acara
+</a>
+ 
       <a href="{{ route('laporan') }}"    class="nav-item {{ request()->routeIs('laporan')    ? 'active':'' }}"><span class="material-symbols-outlined">bar_chart</span> Laporan</a>
       @if(session('user_type') === 'admin')
       <div class="nav-group-label" style="margin-top:4px;">Admin</div>

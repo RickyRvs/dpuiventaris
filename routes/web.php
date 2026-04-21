@@ -89,4 +89,36 @@ Route::middleware([\App\Http\Middleware\AuthMiddleware::class])->group(function 
     Route::get('/register-requests',              [RegisterController::class, 'index'])->name('register-requests');
     Route::post('/register-requests/approve',     [RegisterController::class, 'approve'])->name('register-requests.approve');
     Route::post('/register-requests/reject',      [RegisterController::class, 'reject'])->name('register-requests.reject');
-});
+
+    // ── BERITA ACARA ────────────────────────────────────────────────
+Route::get('/berita-acara',
+    [App\Http\Controllers\BeritaAcaraController::class, 'index'])
+    ->name('berita-acara');
+ 
+Route::post('/berita-acara/store',
+    [App\Http\Controllers\BeritaAcaraController::class, 'store'])
+    ->name('berita-acara.store');
+ 
+Route::get('/berita-acara/{id}/download',
+    [App\Http\Controllers\BeritaAcaraController::class, 'downloadTemplate'])
+    ->name('berita-acara.download');
+ 
+Route::post('/berita-acara/upload',
+    [App\Http\Controllers\BeritaAcaraController::class, 'upload'])
+    ->name('berita-acara.upload');
+ 
+Route::get('/berita-acara/{id}/dokumen',
+    [App\Http\Controllers\BeritaAcaraController::class, 'viewDokumen'])
+    ->name('berita-acara.view-dokumen');
+ 
+Route::post('/berita-acara/destroy',
+    [App\Http\Controllers\BeritaAcaraController::class, 'destroy'])
+    ->name('berita-acara.destroy');
+ 
+Route::get('/berita-acara/{id}/detail',
+    [App\Http\Controllers\BeritaAcaraController::class, 'detail'])
+    ->name('berita-acara.detail');
+
+
+    });
+
